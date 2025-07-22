@@ -5,7 +5,7 @@ import { ToolPanel } from './components/ToolPanel';
 import { Toaster } from './components/ui/sonner';
 import { Button } from './components/ui/button';
 import { ArrowLeft, BookOpen, EyeOff } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 // Types based on API response
 interface Document {

@@ -8,7 +8,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 import { ToolOverlay } from './ToolOverlays';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
