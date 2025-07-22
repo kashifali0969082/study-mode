@@ -803,7 +803,7 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
   };
 
   return (
-    <div className="w-full h-full bg-card flex flex-col relative overflow-hidden">
+    <div className="w-full h-full bg-slate-800/90 backdrop-blur-sm flex flex-col relative overflow-hidden">
       {/* Tool Overlay */}
       {activeOverlay && (
         <ToolOverlay
@@ -816,18 +816,18 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
       )}
 
       {/* Compact Toolbar */}
-      <div className="p-2 border-b space-y-2 flex-shrink-0 bg-card">
+      <div className="p-3 md:p-4 border-b border-slate-700/50 space-y-3 md:space-y-4 flex-shrink-0 bg-slate-800/90 backdrop-blur-sm">
         {/* Model Selector - No label text */}
         <Select value={selectedModel} onValueChange={setSelectedModel}>
-          <SelectTrigger className="h-7 text-xs">
+          <SelectTrigger className="h-8 md:h-9 text-xs md:text-sm bg-slate-700/50 border-slate-600 hover:border-slate-500 hover-lift">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {availableModels.map((model) => (
               <SelectItem key={model.id} value={model.id}>
                 <div className="flex flex-col items-start">
-                  <span className="text-xs">{model.name}</span>
-                  <span className="text-xs text-muted-foreground">{model.provider}</span>
+                  <span className="text-xs md:text-sm font-medium">{model.name}</span>
+                  <span className="text-xs text-slate-400">{model.provider}</span>
                 </div>
               </SelectItem>
             ))}
@@ -835,7 +835,7 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
         </Select>
 
         {/* Tools in 2 columns with hover colors */}
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 gap-2 md:gap-3">
           {availableTools.map((tool) => (
             <Button
               key={tool.id}
@@ -843,7 +843,7 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
               size="sm"
               onClick={() => handleToolUse(tool)}
               disabled={isLoading}
-              className={`justify-start gap-1 h-7 text-xs px-2 transition-colors ${tool.color}`}
+              className={`justify-start gap-1 md:gap-2 h-8 md:h-9 text-xs md:text-sm px-2 md:px-3 transition-all duration-300 hover-lift bg-slate-700/30 border-slate-600 hover:border-slate-500 ${tool.color}`}
               title={tool.description}
             >
               {tool.icon}
@@ -855,25 +855,25 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
 
       {/* Tool Response */}
       {toolResponse && (
-        <div className="p-2 border-b flex-shrink-0 bg-card">
+        <div className="p-3 md:p-4 border-b border-slate-700/50 flex-shrink-0 bg-slate-800/90 backdrop-blur-sm">
           <Collapsible open={!toolResponse.isCollapsed} onOpenChange={(open) => setToolResponse({...toolResponse, isCollapsed: !open})}>
-            <Card>
-              <CardHeader className="pb-1 p-2">
+            <Card className="bg-slate-700/30 border-slate-600/50 hover-lift">
+              <CardHeader className="pb-2 p-3 md:p-4">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xs flex items-center gap-2">
-                    <Brain className="w-3 h-3" />
+                  <CardTitle className="text-sm md:text-base flex items-center gap-2 text-white">
+                    <Brain className="w-4 h-4 text-blue-400" />
                     {toolResponse.tool}
                   </CardTitle>
                   <CollapsibleTrigger asChild>
-                    <Button variant="ghost" size="sm" className="p-0 h-5 w-5">
-                      <ChevronDown className={`w-3 h-3 transition-transform ${toolResponse.isCollapsed ? 'rotate-180' : ''}`} />
+                    <Button variant="ghost" size="sm" className="p-0 h-6 w-6 hover:bg-slate-600/50">
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${toolResponse.isCollapsed ? 'rotate-180' : ''}`} />
                     </Button>
                   </CollapsibleTrigger>
                 </div>
               </CardHeader>
               <CollapsibleContent>
-                <CardContent className="pt-0 p-2">
-                  <div className="text-xs whitespace-pre-wrap">
+                <CardContent className="pt-0 p-3 md:p-4">
+                  <div className="text-xs md:text-sm whitespace-pre-wrap text-slate-200">
                     {toolResponse.content}
                   </div>
                 </CardContent>
@@ -885,10 +885,10 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
 
       {/* Chat Messages */}
       <div className="flex-1 min-h-0 overflow-hidden">
-        <ScrollArea className="h-full">
+        <ScrollArea className="h-full custom-scrollbar">
           <div 
             ref={chatContainerRef}
-            className="p-2 space-y-0"
+            className="p-3 md:p-4 space-y-1"
           >
             {messages.map((message) => (
               <MessageComponent
@@ -901,10 +901,10 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
             ))}
             
             {isLoading && (
-              <div className="flex justify-start mb-3">
-                <div className="bg-muted rounded-lg p-2 flex items-center gap-2">
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                  <span className="text-xs">Thinking...</span>
+              <div className="flex justify-start mb-3 md:mb-4">
+                <div className="bg-slate-700/50 backdrop-blur-sm rounded-lg md:rounded-xl p-3 md:p-4 flex items-center gap-2 md:gap-3 border border-slate-600/50">
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                  <span className="text-sm md:text-base text-slate-200">Thinking...</span>
                 </div>
               </div>
             )}
@@ -915,65 +915,65 @@ export const ToolPanel = forwardRef<ToolPanelRef, ToolPanelProps>(({
       </div>
 
       {/* Chat Input with Context and Mic Button */}
-      <div className="p-2 border-t flex-shrink-0 bg-card">
+      <div className="p-3 md:p-4 border-t border-slate-700/50 flex-shrink-0 bg-slate-800/90 backdrop-blur-sm">
         {/* Context Display */}
         {contextText && (
-          <div className="mb-2 p-2 bg-accent/30 rounded border-l-2 border-l-accent-foreground/30">
+          <div className="mb-3 md:mb-4 p-3 md:p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg md:rounded-xl border-l-4 border-l-blue-500/50 backdrop-blur-sm">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <Quote className="w-3 h-3 opacity-70" />
-                  <span className="text-xs text-muted-foreground">Selected text:</span>
+                <div className="flex items-center gap-2 mb-2">
+                  <Quote className="w-4 h-4 text-blue-400" />
+                  <span className="text-xs md:text-sm text-slate-400 font-medium">Selected text:</span>
                 </div>
-                <p className="text-xs italic">"{contextText.text}"</p>
+                <p className="text-xs md:text-sm italic text-slate-200">"{contextText.text}"</p>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleClearContext}
-                className="h-5 w-5 p-0"
+                className="h-6 w-6 p-0 hover:bg-slate-600/50"
               >
-                <X className="w-3 h-3" />
+                <X className="w-4 h-4 text-slate-400" />
               </Button>
             </div>
           </div>
         )}
 
-        <div className="flex gap-1">
+        <div className="flex gap-2 md:gap-3">
           <Textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={contextText ? "Ask about the selected text..." : "Ask a question..."}
-            className="resize-none text-xs"
+            className="resize-none text-sm md:text-base bg-slate-700/50 border-slate-600 focus:border-blue-500 placeholder:text-slate-400"
             rows={2}
             onKeyDown={handleKeyDown}
           />
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Button
               variant={isRecording ? "destructive" : "outline"}
               size="sm"
               onClick={toggleRecording}
-              className="h-8 w-8 p-0"
+              className="h-8 w-8 md:h-9 md:w-9 p-0 hover-lift"
               disabled={isLoading}
               title={isRecording ? `Recording ${formatRecordingTime(recordingTime)}` : 'Start recording'}
             >
               {isRecording ? (
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-white rounded-full animate-pulse" />
               ) : (
-                <Mic className="w-3 h-3" />
+                <Mic className="w-4 h-4" />
               )}
             </Button>
             <Button
               onClick={() => handleSendMessage()}
               disabled={!inputValue.trim() || isLoading}
               size="sm"
-              className="h-8 w-8 p-0"
+              className="h-8 w-8 md:h-9 md:w-9 p-0 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 hover-lift"
             >
-              <Send className="w-3 h-3" />
+              <Send className="w-4 h-4" />
             </Button>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs md:text-sm text-slate-400 mt-2 md:mt-3 leading-relaxed">
           Enter to send • Shift+Enter for new line • Highlight text to access all learning tools instantly
         </p>
       </div>
