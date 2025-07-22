@@ -145,41 +145,41 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
 }) => {
   if (isCollapsed) {
     return (
-      <div className="w-12 md:w-16 border-r border-slate-700/50 bg-slate-800/90 backdrop-blur-sm p-1 md:p-2">
+      <div className="w-12 border-r bg-card p-1">
         <Button
           variant="ghost"
           size="sm"
           onClick={onToggleCollapse}
-          className="w-full h-7 md:h-8 hover:bg-slate-700/50 hover-lift"
+          className="w-full h-7"
           title="Open Table of Contents"
         >
-          <PanelLeftOpen className="w-4 h-4 md:w-5 md:h-5 text-slate-300" />
+          <PanelLeftOpen className="w-4 h-4" />
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="w-full border-r border-slate-700/50 bg-slate-800/90 backdrop-blur-sm flex flex-col min-w-0">
+    <div className="w-full border-r bg-card flex flex-col min-w-0">
       {/* Header - Compact */}
-      <div className="p-3 md:p-4 border-b border-slate-700/50">
+      <div className="p-2 border-b">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm md:text-base font-medium text-white truncate">Contents</h3>
+          <h3 className="text-sm truncate">Contents</h3>
           <Button
             variant="ghost"
             size="sm"
             onClick={onToggleCollapse}
-            className="h-6 w-6 md:h-7 md:w-7 p-0 flex-shrink-0 hover:bg-slate-700/50 hover-lift"
+            className="h-6 w-6 p-0 flex-shrink-0"
             title="Collapse Table of Contents"
           >
-            <PanelLeftClose className="w-3 h-3 md:w-4 md:h-4 text-slate-300" />
+            <PanelLeftClose className="w-3 h-3" />
           </Button>
         </div>
       </div>
       
       {/* Content - Tight spacing */}
-      <ScrollArea className="flex-1 p-2 md:p-3 custom-scrollbar">
-        <div className="space-y-1">
+      <ScrollArea className="flex-1 p-1">
+        <div className="space-y-0.5">
           {tocData.chapters.map((chapter) => (
             <TOCItemComponent
               key={chapter.chapter_id}

@@ -270,23 +270,23 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const pageContent = generatePageContent();
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/50 backdrop-blur-sm overflow-hidden relative">
+    <div className="flex flex-col h-full bg-background overflow-hidden relative">
       {/* Enhanced Text Selection Popup with All Tools */}
       {showPopup && textSelection && (
         <div
           ref={popupRef}
-          className="fixed z-50 bg-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-lg md:rounded-xl shadow-2xl animate-in fade-in zoom-in-95"
+          className="fixed z-50 bg-card border rounded-lg shadow-lg animate-in fade-in zoom-in-95"
           style={{
             left: `${Math.max(10, Math.min(window.innerWidth - 280, textSelection.x - 140))}px`,
             top: `${Math.max(10, textSelection.y)}px`,
           }}
         >
-          <div className="p-3 md:p-4">
+          <div className="p-3">
             {/* Header */}
-            <div className="flex items-center justify-between mb-3 md:mb-4">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex-1 min-w-0">
-                <p className="text-xs md:text-sm text-slate-400 mb-1">Selected text:</p>
-                <p className="text-xs md:text-sm font-medium text-white truncate max-w-48" title={textSelection.text}>
+                <p className="text-xs text-muted-foreground mb-1">Selected text:</p>
+                <p className="text-xs font-medium truncate max-w-48" title={textSelection.text}>
                   "{textSelection.text}"
                 </p>
               </div>
@@ -294,24 +294,24 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                 onClick={handleClosePopup}
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 ml-2 flex-shrink-0 hover:bg-slate-700/50"
+                className="h-6 w-6 p-0 ml-2 flex-shrink-0"
               >
-                <X className="w-3 h-3 text-slate-400" />
+                <X className="w-3 h-3" />
               </Button>
             </div>
 
             {/* Tools Grid */}
             <div className="space-y-2">
-              <p className="text-xs md:text-sm text-slate-400">Choose an action:</p>
-              <div className="grid grid-cols-5 gap-2 md:gap-3">
+              <p className="text-xs text-muted-foreground">Choose an action:</p>
+              <div className="grid grid-cols-5 gap-2">
                 {availableTools.map((tool) => (
                   <div key={tool.id} className="relative">
                     <Button
                       onClick={() => handleToolSelect(tool.id)}
                       variant={tool.id === 'ask' ? 'default' : 'outline'}
                       size="sm"
-                      className={`h-10 w-10 md:h-12 md:w-12 p-0 relative transition-all duration-300 hover-lift ${tool.color} ${
-                        tool.id === 'ask' ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0' : 'bg-slate-700/50 border-slate-600 hover:border-slate-500'
+                      className={`h-10 w-10 p-0 relative transition-colors ${tool.color} ${
+                        tool.id === 'ask' ? 'ring-2 ring-primary/20' : ''
                       }`}
                       onMouseEnter={() => setHoveredTool(tool.id)}
                       onMouseLeave={() => setHoveredTool(null)}
@@ -321,11 +321,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                     
                     {/* Tooltip */}
                     {hoveredTool === tool.id && (
-                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 md:py-2 bg-slate-800/95 backdrop-blur-sm text-white text-xs md:text-sm rounded-lg shadow-2xl border border-slate-700/50 whitespace-nowrap z-10 animate-in fade-in zoom-in-95">
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-lg border whitespace-nowrap z-10">
                         <div className="font-medium">{tool.name}</div>
-                        <div className="text-slate-400 text-xs">{tool.description}</div>
+                        <div className="text-muted-foreground text-xs">{tool.description}</div>
                         {/* Tooltip arrow */}
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-slate-700"></div>
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-border"></div>
                       </div>
                     )}
                   </div>
@@ -334,8 +334,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             </div>
 
             {/* Quick hint */}
-            <div className="mt-3 md:mt-4 pt-2 border-t border-slate-700/50">
-              <p className="text-xs md:text-sm text-slate-400 text-center">
+            <div className="mt-3 pt-2 border-t">
+              <p className="text-xs text-muted-foreground text-center">
                 {hoveredTool ? availableTools.find(t => t.id === hoveredTool)?.description : 'Hover over tools for details'}
               </p>
             </div>
@@ -344,14 +344,14 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       )}
 
       {/* Compact Toolbar with Centered Navigation */}
-      <div className="border-b border-slate-700/50 p-2 md:p-3 flex items-center justify-between bg-slate-800/90 backdrop-blur-sm flex-shrink-0">
+      <div className="border-b p-2 flex items-center justify-between bg-card flex-shrink-0">
         {/* Left: Zoom Controls */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handleZoomOut} className="h-7">
             <ZoomOut className="w-4 h-4" />
           </Button>
           
-          <span className="text-xs md:text-sm text-slate-400 min-w-[2.5rem] text-center">
+          <span className="text-xs text-muted-foreground min-w-[2.5rem] text-center">
             {Math.round(zoom * 100)}%
           </span>
           
@@ -365,26 +365,26 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         </div>
 
         {/* Center: Page Navigation */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={handlePrevPage}
             disabled={currentPage <= 1}
-            className="h-7 hover-lift"
+            className="h-7"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
           
-          <form onSubmit={handlePageInputSubmit} className="flex items-center gap-1 md:gap-2">
+          <form onSubmit={handlePageInputSubmit} className="flex items-center gap-1">
             <Input
               type="text"
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
-              className="w-12 md:w-14 text-center h-7 text-xs md:text-sm bg-slate-700/50 border-slate-600"
+              className="w-12 text-center h-7 text-xs"
               size={3}
             />
-            <span className="text-slate-400 text-xs md:text-sm">of {totalPages}</span>
+            <span className="text-muted-foreground text-xs">of {totalPages}</span>
           </form>
           
           <Button
@@ -392,19 +392,19 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             size="sm"
             onClick={handleNextPage}
             disabled={currentPage >= totalPages}
-            className="h-7 hover-lift"
+            className="h-7"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
 
         {/* Right: Dark Mode Toggle */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className="h-7 hover-lift"
+            className="h-7"
           >
             {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </Button>
@@ -413,112 +413,108 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
       {/* PDF Content Area with Custom Scrollbar */}
       <div 
-        className={`flex-1 overflow-auto transition-all duration-500 custom-scrollbar ${
-          isDarkMode ? 'bg-slate-900/80' : 'bg-slate-100/80'
+        className={`flex-1 overflow-auto transition-colors custom-scrollbar ${
+          isDarkMode ? 'bg-gray-900' : 'bg-gray-100'
         }`}
       >        
-        <div className="h-full flex justify-center p-3 md:p-6">
+        <div className="h-full flex justify-center p-3">
           <div 
             ref={contentRef}
-            className={`w-full max-w-4xl transition-all duration-500 hover-lift ${
-              isDarkMode ? 'bg-slate-800/90 text-slate-100 border border-slate-700/50' : 'bg-white/90 text-slate-900 border border-slate-300/50'
-            } rounded-lg md:rounded-xl shadow-2xl backdrop-blur-sm overflow-hidden select-text`}
+            className={`w-full max-w-4xl transition-all duration-200 ${
+              isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'
+            } rounded-lg shadow-lg overflow-hidden select-text`}
             style={{ 
               fontSize: `${zoom}em`,
               lineHeight: 1.6
             }}
           >
-            <div className="p-4 md:p-6 lg:p-8 h-full overflow-auto">
+            <div className="p-4 lg:p-6 h-full overflow-auto">
               {/* PDF Header - Compact */}
-              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 pb-3 md:pb-4 border-b border-slate-700/30">
-                <div className="p-2 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg">
-                  <FileText className="w-5 h-5 md:w-6 md:h-6 text-blue-400 flex-shrink-0" />
-                </div>
+              <div className="flex items-center gap-3 mb-4 pb-3 border-b">
+                <FileText className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <div className="min-w-0">
-                  <h1 className="text-lg md:text-xl lg:text-2xl font-semibold mb-1 truncate text-white">{fileName}</h1>
-                  <p className="text-xs md:text-sm text-slate-400">Page {currentPage} of {totalPages}</p>
+                  <h1 className="text-lg mb-1 truncate">{fileName}</h1>
+                  <p className="text-xs text-muted-foreground">Page {currentPage} of {totalPages}</p>
                 </div>
               </div>
 
               {/* Dynamic Content - Tighter spacing with selectable text */}
-              <div className="space-y-4 md:space-y-6 user-select-text">
-                <div className="border-b border-slate-700/30 pb-3 md:pb-4">
-                  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    Chapter {pageContent.chapter}: {pageContent.topic}
-                  </h1>
-                  <p className="text-slate-400 text-sm md:text-base">Section {pageContent.section} - Introduction and Fundamentals</p>
+              <div className="space-y-4 user-select-text">
+                <div className="border-b pb-3">
+                  <h1 className="text-2xl mb-2">Chapter {pageContent.chapter}: {pageContent.topic}</h1>
+                  <p className="text-muted-foreground text-sm">Section {pageContent.section} - Introduction and Fundamentals</p>
                 </div>
                 
-                <div className="space-y-3 md:space-y-4">
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-white">Overview</h2>
-                  <p className="leading-relaxed text-sm md:text-base text-slate-200">
+                <div className="space-y-3">
+                  <h2 className="text-xl">Overview</h2>
+                  <p className="leading-relaxed text-sm">
                     This section introduces the fundamental concepts of {pageContent.topic.toLowerCase()}. 
                     Understanding these principles is essential for developing efficient algorithms and 
                     solving complex computational problems in computer science. Algorithm analysis provides 
                     the mathematical foundation for understanding how programs behave under different conditions.
                   </p>
                   
-                  <p className="leading-relaxed text-sm md:text-base text-slate-200">
+                  <p className="leading-relaxed text-sm">
                     The concepts covered in this chapter build upon previous knowledge and provide 
                     the foundation for more advanced topics. Students should focus on understanding 
                     both the theoretical aspects and practical applications. Performance analysis is crucial 
                     for writing efficient code that scales well with larger input sizes.
                   </p>
                   
-                  <h3 className="text-base md:text-lg lg:text-xl font-semibold mt-4 md:mt-6 text-white">Key Concepts</h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 list-disc pl-4 md:pl-6">
+                  <h3 className="text-lg mt-4">Key Concepts</h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 list-disc pl-4">
                     {pageContent.concepts.map((concept, index) => (
-                      <li key={index} className="leading-relaxed text-sm md:text-base text-slate-200">{concept}</li>
+                      <li key={index} className="leading-relaxed text-sm">{concept}</li>
                     ))}
                   </ul>
                   
-                  <div className={`mt-4 md:mt-6 p-3 md:p-4 rounded-lg md:rounded-xl border ${
-                    isDarkMode ? 'bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30' : 'bg-blue-50 border-blue-200'
+                  <div className={`mt-6 p-3 rounded-lg ${
+                    isDarkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'
                   }`}>
-                    <h4 className="flex items-center gap-2 mb-2 text-sm md:text-base font-medium text-white">
-                      <span className="text-blue-400 text-lg">💡</span>
+                    <h4 className="flex items-center gap-2 mb-2 text-sm">
+                      <span className="text-blue-500">💡</span>
                       Study Tip
                     </h4>
-                    <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
+                    <p className="text-xs">
                       Practice implementing these concepts in your preferred programming language. 
                       Use the study tools on the right to create flashcards and quizzes for better retention. 
                       Work through the exercises at the end of each section to reinforce your understanding.
-                      <strong className="text-blue-400"> Try highlighting any text in this document to access all learning tools instantly!</strong>
+                      <strong> Try highlighting any text in this document to access all learning tools instantly!</strong>
                     </p>
                   </div>
 
                   {/* Detailed Algorithm Analysis Section */}
-                  <div className="mt-6 md:mt-8 space-y-3 md:space-y-4">
-                    <h3 className="text-base md:text-lg lg:text-xl font-semibold text-white">Algorithm Analysis in Detail</h3>
-                    <p className="text-sm md:text-base leading-relaxed text-slate-200">
+                  <div className="mt-6 space-y-3">
+                    <h3 className="text-lg">Algorithm Analysis in Detail</h3>
+                    <p className="text-sm leading-relaxed">
                       Algorithm analysis is the theoretical study of computer program performance and resource usage. 
                       It involves mathematical techniques to describe the running time of an algorithm as a function 
                       of its input size. This analysis helps us predict how the algorithm will perform on large datasets 
                       and compare different algorithmic approaches.
                     </p>
                     
-                    <p className="text-sm md:text-base leading-relaxed text-slate-200">
+                    <p className="text-sm leading-relaxed">
                       The most common complexity measures are time complexity and space complexity. Time complexity 
                       describes how the running time increases with input size, while space complexity describes 
                       how memory usage grows. Both are typically expressed using Big O notation, which provides 
                       an upper bound on the growth rate.
                     </p>
 
-                    <h4 className="text-sm md:text-base lg:text-lg font-medium mt-4 md:mt-6 text-white">Common Time Complexities</h4>
-                    <div className="space-y-2 md:space-y-3 text-sm md:text-base">
-                      <p className="text-slate-200"><strong className="text-green-400">O(1) - Constant Time:</strong> Operations that take the same amount of time regardless of input size, such as array indexing or hash table lookups.</p>
-                      <p className="text-slate-200"><strong className="text-blue-400">O(log n) - Logarithmic Time:</strong> Algorithms that divide the problem in half at each step, like binary search or balanced tree operations.</p>
-                      <p className="text-slate-200"><strong className="text-yellow-400">O(n) - Linear Time:</strong> Algorithms that examine each element once, such as linear search or finding the maximum element in an unsorted array.</p>
-                      <p className="text-slate-200"><strong className="text-orange-400">O(n log n) - Linearithmic Time:</strong> Efficient sorting algorithms like merge sort and heap sort fall into this category.</p>
-                      <p className="text-slate-200"><strong className="text-red-400">O(n²) - Quadratic Time:</strong> Algorithms with nested loops over the input, such as bubble sort or simple matrix multiplication.</p>
+                    <h4 className="text-base mt-4">Common Time Complexities</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><strong>O(1) - Constant Time:</strong> Operations that take the same amount of time regardless of input size, such as array indexing or hash table lookups.</p>
+                      <p><strong>O(log n) - Logarithmic Time:</strong> Algorithms that divide the problem in half at each step, like binary search or balanced tree operations.</p>
+                      <p><strong>O(n) - Linear Time:</strong> Algorithms that examine each element once, such as linear search or finding the maximum element in an unsorted array.</p>
+                      <p><strong>O(n log n) - Linearithmic Time:</strong> Efficient sorting algorithms like merge sort and heap sort fall into this category.</p>
+                      <p><strong>O(n²) - Quadratic Time:</strong> Algorithms with nested loops over the input, such as bubble sort or simple matrix multiplication.</p>
                     </div>
                   </div>
 
                   {/* Example/Algorithm Box - Compact */}
-                  <div className={`mt-4 md:mt-6 p-3 md:p-4 rounded-lg md:rounded-xl font-mono text-xs md:text-sm border ${
-                    isDarkMode ? 'bg-slate-700/50 border-slate-600/50 backdrop-blur-sm' : 'bg-gray-50 border-gray-300'
+                  <div className={`mt-4 p-3 rounded-lg font-mono text-xs ${
+                    isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-300'
                   }`}>
-                    <h4 className="mb-2 md:mb-3 font-sans text-sm md:text-base font-medium text-white">Algorithm Example: Binary Search</h4>
+                    <h4 className="mb-2 font-sans text-sm">Algorithm Example: Binary Search</h4>
                     <pre className="whitespace-pre-wrap overflow-auto">
 {`function binarySearch(arr, target) {
   let left = 0;
@@ -545,23 +541,23 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                   </div>
 
                   {/* Exercises Section - Compact */}
-                  <div className="mt-6 md:mt-8">
-                    <h3 className="text-base md:text-lg lg:text-xl font-semibold mb-3 md:mb-4 text-white">Practice Exercises</h3>
-                    <div className="space-y-2 md:space-y-3">
-                      <div className={`p-3 md:p-4 rounded-lg md:rounded-xl text-sm md:text-base border hover-lift transition-all duration-300 ${
-                        isDarkMode ? 'bg-slate-700/30 border-slate-600/30' : 'bg-gray-50 border-gray-200'
+                  <div className="mt-6">
+                    <h3 className="text-lg mb-3">Practice Exercises</h3>
+                    <div className="space-y-2">
+                      <div className={`p-2 rounded text-sm ${
+                        isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                       }`}>
-                        <p className="text-slate-200"><strong className="text-blue-400">Exercise {currentPage}.1:</strong> Implement the basic binary search algorithm and analyze its time complexity step by step. Explain why it's O(log n).</p>
+                        <p><strong>Exercise {currentPage}.1:</strong> Implement the basic binary search algorithm and analyze its time complexity step by step. Explain why it's O(log n).</p>
                       </div>
-                      <div className={`p-3 md:p-4 rounded-lg md:rounded-xl text-sm md:text-base border hover-lift transition-all duration-300 ${
-                        isDarkMode ? 'bg-slate-700/30 border-slate-600/30' : 'bg-gray-50 border-gray-200'
+                      <div className={`p-2 rounded text-sm ${
+                        isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                       }`}>
-                        <p className="text-slate-200"><strong className="text-green-400">Exercise {currentPage}.2:</strong> Compare linear search vs binary search performance. When would you use each approach?</p>
+                        <p><strong>Exercise {currentPage}.2:</strong> Compare linear search vs binary search performance. When would you use each approach?</p>
                       </div>
-                      <div className={`p-3 md:p-4 rounded-lg md:rounded-xl text-sm md:text-base border hover-lift transition-all duration-300 ${
-                        isDarkMode ? 'bg-slate-700/30 border-slate-600/30' : 'bg-gray-50 border-gray-200'
+                      <div className={`p-2 rounded text-sm ${
+                        isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                       }`}>
-                        <p className="text-slate-200"><strong className="text-purple-400">Exercise {currentPage}.3:</strong> Apply the concept to solve a real-world problem: design an efficient algorithm to find a specific record in a large sorted database.</p>
+                        <p><strong>Exercise {currentPage}.3:</strong> Apply the concept to solve a real-world problem: design an efficient algorithm to find a specific record in a large sorted database.</p>
                       </div>
                     </div>
                   </div>
@@ -569,14 +565,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
               </div>
 
               {/* Footer - Compact */}
-              <div className="mt-8 md:mt-12 pt-4 md:pt-6 border-t border-slate-700/30 text-center text-xs md:text-sm text-slate-400">
-                <p className="flex items-center justify-center gap-2 flex-wrap">
-                  <span>Introduction to Algorithms</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span>Page {currentPage}</span>
-                  <span className="hidden sm:inline">•</span>
-                  <span className="text-blue-400">Highlight text to access all learning tools</span>
-                </p>
+              <div className="mt-8 pt-4 border-t text-center text-xs text-muted-foreground">
+                <p>Introduction to Algorithms • Page {currentPage} • Highlight text to access all learning tools</p>
               </div>
             </div>
           </div>

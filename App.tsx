@@ -69,7 +69,7 @@ export default function App() {
   const [chatHistory, setChatHistory] = useState<ChatHistory | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isTOCCollapsed, setIsTOCCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isMobile, setIsMobile] = useState(false);
   const [rightPanelWidth, setRightPanelWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -349,82 +349,57 @@ export default function App() {
 
   if (isLoading || !studyData) {
     return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-tr from-pink-500/10 to-orange-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        </div>
-        
-        <div className="text-center space-y-6 relative z-10">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-12 w-12 md:h-16 md:w-16 border-4 border-transparent bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
-            <div className="animate-spin rounded-full h-12 w-12 md:h-16 md:w-16 border-4 border-t-transparent border-blue-500 absolute top-0 left-1/2 transform -translate-x-1/2" style={{animationDirection: 'reverse', animationDuration: '1.5s'}}></div>
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Loading Study Materials
-            </h2>
-            <p className="text-slate-400 text-sm md:text-base">Preparing your learning environment...</p>
-          </div>
+      <div className="h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading study materials...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen gradient-bg flex flex-col overflow-hidden relative">
-      {/* Background decorative elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-tr from-pink-500/10 to-orange-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '3s'}}></div>
-      </div>
-
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
       {/* Header with Hide Book Button */}
-      <header className="border-b border-slate-700/50 bg-slate-800/90 backdrop-blur-sm px-4 md:px-6 py-3 md:py-4 flex-shrink-0 z-10 relative">
-        <div className="flex items-center justify-between max-w-full">
+      <header className="border-b bg-card px-4 py-2 flex-shrink-0 z-10">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 flex-1">
             <Button 
               variant="ghost" 
               onClick={handleGoHome}
-              className="gap-2 px-2 md:px-3 hover:bg-slate-700/50 h-8 md:h-10 text-sm md:text-base hover-lift"
+              className="gap-2 px-2 hover:bg-accent h-8"
             >
-              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
-              <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                AdaptiveLearnAI
-              </span>
+              <ArrowLeft className="w-4 h-4" />
+              <span className="font-semibold text-primary">AdaptiveLearnAI</span>
             </Button>
             
-            <div className="h-5 md:h-6 w-px bg-slate-600" />
+            <div className="h-5 w-px bg-border" />
             
             <div className="flex-1 min-w-0">
-              <h1 className="text-sm md:text-base lg:text-lg font-medium text-white truncate">
-                {studyData.document.title}
-              </h1>
-              <p className="text-xs md:text-sm text-slate-400">
+              <h1 className="text-base truncate">{studyData.document.title}</h1>
+              <p className="text-xs text-muted-foreground">
                 {!isPDFHidden && `Page ${currentPage} of ${totalPages} • ${Math.round((currentPage / totalPages) * 100)}% complete`}
-                {isPDFHidden && 'Focus Mode - Document Hidden'}
+                {isPDFHidden && 'Study Mode - Document Hidden'}
               </p>
             </div>
           </div>
           
           {/* Hide/Show Document Button */}
           <Button 
-            variant="ghost" 
+            variant="outline" 
             onClick={handleTogglePDF}
-            className="gap-2 h-8 md:h-10 px-3 md:px-4 bg-slate-700/50 hover:bg-slate-600/50 border border-slate-600 hover:border-slate-500 text-sm md:text-base hover-lift"
+            className="gap-2 h-8"
             title={isPDFHidden ? 'Show document' : 'Hide document for focused studying'}
           >
             {isPDFHidden ? (
               <>
-                <BookOpen className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="hidden sm:inline text-sm md:text-base">Show Book</span>
+                <BookOpen className="w-4 h-4" />
+                <span className="text-sm">Show Book</span>
               </>
             ) : (
               <>
-                <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="hidden sm:inline text-sm md:text-base">Hide Book</span>
+                <EyeOff className="w-4 h-4" />
+                <span className="text-sm">Hide Book</span>
               </>
             )}
           </Button>
@@ -434,13 +409,13 @@ export default function App() {
       {/* Main Content Area */}
       <div 
         ref={containerRef}
-        className="flex-1 flex overflow-hidden relative z-10"
+        className="flex-1 flex overflow-hidden relative"
         style={{ height: 'calc(100vh - 57px)' }}
       >
         {isMobile ? (
           <div className="flex flex-col w-full h-full">
             {hasTOC && !isPDFHidden && (
-              <div className="flex-shrink-0 bg-slate-800/90 backdrop-blur-sm border-b border-slate-700/50">
+              <div className="flex-shrink-0">
                 <TableOfContents
                   isCollapsed={isTOCCollapsed}
                   onToggleCollapse={handleTOCToggle}
@@ -452,7 +427,7 @@ export default function App() {
             )}
             
             {!isPDFHidden && (
-              <div className="flex-1 min-h-0 overflow-hidden bg-slate-900/50 backdrop-blur-sm">
+              <div className="flex-1 min-h-0 overflow-hidden">
                 <PDFViewer
                   currentPage={currentPage}
                   totalPages={totalPages}
@@ -464,7 +439,7 @@ export default function App() {
               </div>
             )}
             
-            <div className={`border-t border-slate-700/50 bg-slate-800/90 backdrop-blur-sm ${isPDFHidden ? 'flex-1' : 'max-h-96'} flex-shrink-0 overflow-hidden`}>
+            <div className={`border-t ${isPDFHidden ? 'flex-1' : 'max-h-96'} flex-shrink-0 overflow-hidden`}>
               <ToolPanel 
                 ref={toolPanelRef}
                 chatSessionId={studyData.chat_session_id}
@@ -481,7 +456,7 @@ export default function App() {
             {/* Left Sidebar - Table of Contents (only if available and PDF not hidden) */}
             {hasTOC && !isPDFHidden && (
               <div 
-                className="flex-shrink-0 border-r border-slate-700/50 bg-slate-800/90 backdrop-blur-sm overflow-hidden hover-lift"
+                className="flex-shrink-0 border-r bg-card overflow-hidden"
                 style={{ width: `${tocWidth}px` }}
               >
                 <TableOfContents
@@ -497,7 +472,7 @@ export default function App() {
             {/* Center - PDF Viewer (conditionally rendered) */}
             {!isPDFHidden && (
               <div 
-                className="flex-1 min-w-0 overflow-hidden bg-slate-900/50 backdrop-blur-sm"
+                className="flex-1 min-w-0 overflow-hidden"
                 style={{ 
                   width: `calc(100% - ${tocWidth}px - ${rightPanelWidth}px - 4px)`
                 }}
@@ -516,18 +491,18 @@ export default function App() {
             {/* Resize Handle (only when PDF is visible) */}
             {!isPDFHidden && (
               <div
-                className={`w-1 bg-slate-700/50 hover:bg-gradient-to-b hover:from-blue-500/50 hover:to-purple-500/50 cursor-col-resize transition-all duration-300 flex-shrink-0 relative ${
-                  isResizing ? 'bg-gradient-to-b from-blue-500/50 to-purple-500/50 shadow-lg' : ''
+                className={`w-1 bg-border hover:bg-primary/20 cursor-col-resize transition-colors flex-shrink-0 relative ${
+                  isResizing ? 'bg-primary/30' : ''
                 }`}
                 onMouseDown={handleMouseDown}
               >
-                <div className="absolute inset-y-0 left-1/2 transform -translate-x-1/2 w-1 bg-current opacity-70" />
+                <div className="absolute inset-y-0 left-1/2 transform -translate-x-1/2 w-1 bg-current opacity-50" />
               </div>
             )}
 
             {/* Right Sidebar - Tool Panel */}
             <div 
-              className="flex-shrink-0 border-l border-slate-700/50 bg-slate-800/90 backdrop-blur-sm overflow-hidden hover-lift"
+              className="flex-shrink-0 border-l bg-card overflow-hidden"
               style={{ 
                 width: isPDFHidden ? '100%' : `${rightPanelWidth}px`,
                 borderLeft: isPDFHidden ? 'none' : undefined
@@ -549,15 +524,7 @@ export default function App() {
 
       <Toaster
         position="bottom-right"
-        toastOptions={{ 
-          duration: 3000,
-          style: {
-            background: 'rgba(30, 41, 59, 0.95)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(51, 65, 85, 0.5)',
-            color: '#f8fafc'
-          }
-        }}
+        toastOptions={{ duration: 3000 }}
       />
     </div>
   );
